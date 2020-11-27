@@ -19,14 +19,14 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     @Override
     public List<EmployeePayrollData> getEmployeePayrollData() {
-        
+
         return payrollRepository.findAll();
     }
 
     @Override
     public EmployeePayrollData getEmployeePayrollDataById(int empId) {
-        // TODO Auto-generated method stub
-        return null;
+
+        return payrollRepository.findById(empId).get();
     }
 
     @Override
@@ -37,14 +37,20 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     @Override
     public EmployeePayrollData updateEmployeePayrollData(int empId, EmployeePayrollDTO employeePayrollDTO) {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO exception in case not exists
+
+        EmployeePayrollData payrollData = payrollRepository.getOne(empId);
+        payrollData.setName(employeePayrollDTO.name);
+        payrollData.setSalary(employeePayrollDTO.salary);
+        payrollRepository.save(payrollData);
+
+        return getEmployeePayrollDataById(empId);
     }
 
     @Override
     public void deleteEmployeePayrollData(int empID) {
-        // TODO Auto-generated method stub
-
+        // TODO exception in case not exists
+        payrollRepository.deleteById(empID);
     }
 
 }
