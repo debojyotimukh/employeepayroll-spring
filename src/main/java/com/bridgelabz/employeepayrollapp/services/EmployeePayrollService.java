@@ -1,7 +1,6 @@
 package com.bridgelabz.employeepayrollapp.services;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.bridgelabz.employeepayrollapp.dto.EmployeePayrollDTO;
 import com.bridgelabz.employeepayrollapp.model.EmployeePayrollData;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeePayrollService implements IEmployeePayrollService {
-    private final AtomicInteger counter = new AtomicInteger();
 
     @Autowired
     private EmployeePayrollRepository payrollRepository;
@@ -32,7 +30,7 @@ public class EmployeePayrollService implements IEmployeePayrollService {
     @Override
     public EmployeePayrollData createEmployeePayrollData(EmployeePayrollDTO employeePayrollDTO) {
 
-        return payrollRepository.save(new EmployeePayrollData(counter.incrementAndGet(), employeePayrollDTO));
+        return payrollRepository.save(new EmployeePayrollData(employeePayrollDTO));
     }
 
     @Override
@@ -40,8 +38,15 @@ public class EmployeePayrollService implements IEmployeePayrollService {
         // TODO exception in case not exists
 
         EmployeePayrollData payrollData = payrollRepository.getOne(empId);
+        
         payrollData.setName(employeePayrollDTO.name);
         payrollData.setSalary(employeePayrollDTO.salary);
+        payrollData.setDepartment(employeePayrollDTO.department);
+        payrollData.setGender(employeePayrollDTO.gender);
+        payrollData.setNote(employeePayrollDTO.note);
+        payrollData.setProfilePic(employeePayrollDTO.profilePic);
+        payrollData.setStartDate(employeePayrollDTO.startDate);
+
         payrollRepository.save(payrollData);
 
         return getEmployeePayrollDataById(empId);
