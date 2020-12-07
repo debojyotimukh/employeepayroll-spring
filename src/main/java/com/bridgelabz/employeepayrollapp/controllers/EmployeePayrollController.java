@@ -8,6 +8,8 @@ import com.bridgelabz.employeepayrollapp.exception.EmployeePayrollException;
 import com.bridgelabz.employeepayrollapp.model.EmployeePayrollData;
 import com.bridgelabz.employeepayrollapp.services.IEmployeePayrollService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = { "http://127.0.0.1:5500", "http://localhost:5500", "http://localhost:3000" })
 public class EmployeePayrollController {
 
+    private static final Logger logger = LoggerFactory.getLogger(EmployeePayrollController.class);
     @Autowired
     private IEmployeePayrollService employeePayrollService;
 
@@ -74,7 +77,7 @@ public class EmployeePayrollController {
 
     @ExceptionHandler({ EmployeePayrollException.class })
     public ResponseEntity<ResponseDTO> handleException(EmployeePayrollException e) {
-
+        logger.error(e.getMessage());
         ResponseDTO responseDTO = new ResponseDTO("Some exception cought", e.getMessage());
 
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.EXPECTATION_FAILED);
