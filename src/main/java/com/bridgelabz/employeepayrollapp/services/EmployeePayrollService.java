@@ -3,6 +3,7 @@ package com.bridgelabz.employeepayrollapp.services;
 import java.util.List;
 
 import com.bridgelabz.employeepayrollapp.dto.EmployeePayrollDTO;
+import com.bridgelabz.employeepayrollapp.exception.EmployeePayrollException;
 import com.bridgelabz.employeepayrollapp.model.EmployeePayrollData;
 import com.bridgelabz.employeepayrollapp.repository.EmployeePayrollRepository;
 
@@ -23,7 +24,8 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     @Override
     public EmployeePayrollData getEmployeePayrollDataById(int empId) {
-
+        if(payrollRepository.findById(empId).isEmpty())
+            throw new EmployeePayrollException("Required employee data not found!");
         return payrollRepository.findById(empId).get();
     }
 

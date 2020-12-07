@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bridgelabz.employeepayrollapp.dto.EmployeePayrollDTO;
 import com.bridgelabz.employeepayrollapp.dto.ResponseDTO;
+import com.bridgelabz.employeepayrollapp.exception.EmployeePayrollException;
 import com.bridgelabz.employeepayrollapp.model.EmployeePayrollData;
 import com.bridgelabz.employeepayrollapp.services.IEmployeePayrollService;
 
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,8 @@ public class EmployeePayrollController {
     public ResponseEntity<ResponseDTO> getEmployeePayrollData() {
         List<EmployeePayrollData> empList = employeePayrollService.getEmployeePayrollData();
         ResponseDTO respDTO = new ResponseDTO("Get Call Sucessful", empList);
+        if (respDTO.getMessage().contains("500"))
+            throw new EmployeePayrollException();
         return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
     }
 
@@ -68,4 +72,11 @@ public class EmployeePayrollController {
         return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
     }
 
+    @ExceptionHandler({ EmployeePayrollException.class })
+    public ResponseEntity<ResponseDTO> handleException(EmployeePayrollException e) {
+
+        ResponseDTO responseDTO = new ResponseDTO("Some exception cought", e.getMessage());
+
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.EXPECTATION_FAILED);
+    }
 }
