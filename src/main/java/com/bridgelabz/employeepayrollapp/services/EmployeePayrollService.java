@@ -24,8 +24,9 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     @Override
     public EmployeePayrollData getEmployeePayrollDataById(int empId) {
-        if(payrollRepository.findById(empId).isEmpty())
+        if (payrollRepository.findById(empId).isEmpty())
             throw new EmployeePayrollException("Required employee data not found!");
+
         return payrollRepository.findById(empId).get();
     }
 
@@ -37,10 +38,11 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     @Override
     public EmployeePayrollData updateEmployeePayrollData(int empId, EmployeePayrollDTO employeePayrollDTO) {
-        // TODO exception in case not exists
+        if (payrollRepository.findById(empId).isEmpty())
+            throw new EmployeePayrollException("Required employee data not found!");
 
         EmployeePayrollData payrollData = payrollRepository.getOne(empId);
-        
+
         payrollData.setName(employeePayrollDTO.name);
         payrollData.setSalary(employeePayrollDTO.salary);
         payrollData.setDepartment(employeePayrollDTO.department);
@@ -56,7 +58,9 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     @Override
     public void deleteEmployeePayrollData(int empID) {
-        // TODO exception in case not exists
+        if (payrollRepository.findById(empID).isEmpty())
+            throw new EmployeePayrollException("Required employee data not found!");
+            
         payrollRepository.deleteById(empID);
     }
 
